@@ -37,7 +37,7 @@ class MovieController extends Controller
             $insert= Movie::create($data);
             return response()->json([
                 'status' => true,
-                'message' => 'Data berhasil ditambahkan',
+                'message' => 'Data Movie berhasil ditambahkan',
             ]);
             
         } catch (\Exception $e) {

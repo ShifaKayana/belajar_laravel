@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Validator;
@@ -138,6 +139,49 @@ class AuthController extends Controller
                 'message'=>'gagal hapus user. '.$e,
             ]);
         }
+    }
+
+    public function login(Request $request) //function login
+    {
+        $validator = Validator::make($request->all(),[
+            'email' => 'required|string|email',
+            'password' => 'required|string',
+        ]);
+        if($validator->fails()){
+            return response()->json([
+                'status' => false,
+                'message' => $validator->errors(),
+            ]);
+        }
+        $credentials = $request->only('email', 'password');
+        $token = Auth::guard('api')->attempt($credentials); //digunakan untuk membuat token Ketika sukses login. guard(‘api’) diambil berdasarkan script file auth.php yang sudah kita setting sebelumnya.
+        if (!$token) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized',
+            ], 401);
+        }
+
+
+        $user = Auth::guard('api')->user();
+        return response()->json([
+                'status' => true,
+                'message'=>'Sukses login',
+                'data'=>$user,
+                'authorisation' => [
+                    'token' => $token,
+                    'type' => 'bearer',
+                ]
+            ]);
+    }
+
+    public function logout() //function logout
+    {
+        Auth::guard('api')->logout();
+        return response()->json([
+            'status' => true,
+            'message' => 'Sukses logout',
+        ]);
     }
 
 

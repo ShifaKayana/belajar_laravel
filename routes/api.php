@@ -40,3 +40,8 @@ Route::get("/get_movie",[MovieController::class,"getMovie"]);
 Route::get("/get_detail_movie/{id}",[MovieController::class,"getDetailMovie"]);
 Route::put("/update_movie/{id}",[MovieController::class,"update_movie"]); //variable {id} ini artinya endpoint ini mengandung nilai parameter di url yang disimpan kedalam variable dengan nama ID.
 Route::delete("/hapus_movie/{id}",[MovieController ::class,"hapus_movie"]);
+
+//LOGIN
+Route::post("/login",[AuthController::class,"login"]);
+//LOGOUT
+Route::get("/logout",[AuthController::class,"logout"]);
